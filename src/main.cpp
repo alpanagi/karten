@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
       boost::algorithm::trim(input);
 
       if (input == question.a) {
-        question.next = now + question.repeat * 3600;
+        question.next = now + question.repeat * 600;
         question.repeat *= 2;
         std::cout << "CORRECT\n" << std::endl;
       } else {
