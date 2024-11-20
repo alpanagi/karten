@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
     bool found = false;
     for (Question &question : questions) {
       if (question.next > now) {
-        break;
+        continue;
       }
 
       found = true;
