@@ -81,7 +81,6 @@ int main(int argc, char *argv[]) {
     if (!found) {
       std::cout << "ALL CARDS ARE UP TO DATE" << std::endl;
       save(0);
-      exit(1);
     }
   }
 }
