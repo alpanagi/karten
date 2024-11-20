@@ -69,8 +69,11 @@ int main(int argc, char *argv[]) {
 
       if (input == question.a) {
         question.next = now + question.repeat * 3600;
+        question.repeat *= 2;
         std::cout << "CORRECT\n" << std::endl;
       } else {
+        question.next = now;
+        question.repeat = 1;
         std::cout << std::endl;
       }
     }
