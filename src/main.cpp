@@ -51,6 +51,8 @@ int main(int argc, char *argv[]) {
 
   signal(SIGINT, save);
 
+  std::cout << "Number of questions: " << questions.size() << "\n" << std::endl;
+
   std::string input;
   while (true) {
     const long now =
@@ -74,7 +76,7 @@ int main(int argc, char *argv[]) {
       } else {
         question.next = now;
         question.repeat = 1;
-        std::cout << std::endl;
+        std::cout << question.a << "\n" << std::endl;
       }
     }
 
