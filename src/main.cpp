@@ -8,6 +8,8 @@
 #include <iostream>
 #include <yaml-cpp/yaml.h>
 
+const int INTERVAL = 900;
+
 struct Question {
   std::string q;
   std::string a;
@@ -70,7 +72,7 @@ int main(int argc, char *argv[]) {
       boost::algorithm::trim(input);
 
       if (input == question.a) {
-        question.next = now + question.repeat * 600;
+        question.next = now + question.repeat * INTERVAL;
         question.repeat *= 2;
         std::cout << "CORRECT\n" << std::endl;
       } else {
