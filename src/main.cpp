@@ -8,7 +8,7 @@
 #include <iostream>
 #include <yaml-cpp/yaml.h>
 
-const int INTERVAL = 900;
+const int INTERVAL = 1800;
 
 struct Question {
   std::string q;
