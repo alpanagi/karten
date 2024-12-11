@@ -9,6 +9,7 @@
 #include <yaml-cpp/yaml.h>
 
 const int INTERVAL = 1800;
+const int MAXIMUM_REPEAT = 512;
 
 struct Question {
   std::string q;
@@ -73,7 +74,7 @@ int main(int argc, char *argv[]) {
 
       if (input == question.a) {
         question.next = now + question.repeat * INTERVAL;
-        question.repeat *= 2;
+        question.repeat = std::min(question.repeat * 2, MAXIMUM_REPEAT);
         std::cout << "CORRECT\n" << std::endl;
       } else {
         question.next = now;
