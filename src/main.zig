@@ -35,19 +35,28 @@ pub fn main(init: std.process.Init) !void {
     var stdin_file_reader = std.Io.File.stdin().reader(init.io, &stdin_buffer);
     const stdin = &stdin_file_reader.interface;
 
-    try stdout.print("Card count: {d}\n", .{cards.items.len});
+    try stdout.print("Card count: {d}\n\n", .{cards.items.len});
 
     while (true) {
         const card_index = random.uintLessThan(usize, cards.items.len);
         const card = cards.items[card_index];
 
-        try stdout.print("\n{s}\n", .{card.question});
-        const response = try stdin.takeDelimiter('\n') orelse return;
+        try stdout.print("{s} ({d}/{d})", .{
+            card.question,
+            cards.items.len,
+            card_file.card.len,
+        });
+
+        var response = try stdin.takeDelimiter('\n') orelse return;
+        try stdout.print("{s}\n", .{card.answer});
+        response = try stdin.takeDelimiter('\n') orelse return;
 
         if (std.mem.eql(u8, "y", response)) {
             _ = cards.swapRemove(card_index);
+
+            try stdout.print("\n", .{});
             if (cards.items.len == 0) {
-                try stdout.print("\nAll cards finished\n", .{});
+                try stdout.print("All cards finished\n", .{});
                 return;
             }
         }
