@@ -17,6 +17,9 @@ pub fn main(init: std.process.Init) !void {
     var card_file = toml.parseAlloc(allocator, CardFile, text) catch
         std.process.fatal("Could not parse toml file: {s}", .{file_path});
     defer card_file.deinit(allocator);
+
+    if (card_file.card.len == 0)
+        std.process.fatal("Card file is empty: {s}", .{file_path});
 }
 
 const CardFile = struct {
