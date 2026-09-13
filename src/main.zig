@@ -20,6 +20,26 @@ pub fn main(init: std.process.Init) !void {
 
     if (card_file.card.len == 0)
         std.process.fatal("Card file is empty: {s}", .{file_path});
+
+    const random_source = std.Random.IoSource{ .io = init.io };
+    const random = random_source.interface();
+
+    var stdout_file_writer = std.Io.File.stdout().writer(init.io, &.{});
+    const stdout = &stdout_file_writer.interface;
+
+    var stdin_buffer: [4096]u8 = undefined;
+    var stdin_file_reader = std.Io.File.stdin().reader(init.io, &stdin_buffer);
+    const stdin = &stdin_file_reader.interface;
+
+    try stdout.print("Card count: {d}\n", .{card_file.card.len});
+
+    while (true) {
+        const card_index = random.uintLessThan(usize, card_file.card.len);
+        const card = card_file.card[card_index];
+
+        try stdout.print("\n{s}\n", .{card.question});
+        _ = try stdin.takeDelimiter('\n');
+    }
 }
 
 const CardFile = struct {
