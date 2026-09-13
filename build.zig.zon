@@ -1,0 +1,14 @@
+.{
+    .name = .karten,
+    .version = "0.0.0",
+    .fingerprint = 0x57ed7be171240f7f,
+    .minimum_zig_version = "0.16.0",
+    .dependencies = .{},
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+        "LICENSE",
+        "README.md",
+    },
+}
