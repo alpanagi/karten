@@ -18,7 +18,11 @@ pub fn main(init: std.process.Init) !void {
         std.process.fatal("Could not parse toml file: {s}", .{file_path});
     defer card_file.deinit(allocator);
 
-    if (card_file.card.len == 0)
+    var cards = std.ArrayList(Card).empty;
+    try cards.appendSlice(allocator, card_file.card);
+    defer cards.deinit(allocator);
+
+    if (cards.items.len == 0)
         std.process.fatal("Card file is empty: {s}", .{file_path});
 
     const random_source = std.Random.IoSource{ .io = init.io };
@@ -31,14 +35,22 @@ pub fn main(init: std.process.Init) !void {
     var stdin_file_reader = std.Io.File.stdin().reader(init.io, &stdin_buffer);
     const stdin = &stdin_file_reader.interface;
 
-    try stdout.print("Card count: {d}\n", .{card_file.card.len});
+    try stdout.print("Card count: {d}\n", .{cards.items.len});
 
     while (true) {
-        const card_index = random.uintLessThan(usize, card_file.card.len);
-        const card = card_file.card[card_index];
+        const card_index = random.uintLessThan(usize, cards.items.len);
+        const card = cards.items[card_index];
 
         try stdout.print("\n{s}\n", .{card.question});
-        _ = try stdin.takeDelimiter('\n');
+        const response = try stdin.takeDelimiter('\n') orelse return;
+
+        if (std.mem.eql(u8, "y", response)) {
+            _ = cards.swapRemove(card_index);
+            if (cards.items.len == 0) {
+                try stdout.print("\nAll cards finished\n", .{});
+                return;
+            }
+        }
     }
 }
 
